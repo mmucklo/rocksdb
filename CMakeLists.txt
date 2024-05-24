@@ -1279,7 +1279,7 @@ if(WITH_TESTS OR WITH_BENCHMARK_TOOLS)
   test_util/mock_time_env.cc
   test_util/secondary_cache_test_util.cc
   test_util/testharness.cc)
-  target_link_libraries(testharness gtest)
+  target_link_libraries(testharness rocksdb_gtest)
 endif()
 
 if(WITH_TESTS)
@@ -1527,7 +1527,7 @@ if(WITH_TESTS)
         EXCLUDE_FROM_DEFAULT_BUILD_RELWITHDEBINFO 1
         OUTPUT_NAME ${exename}${ARTIFACT_SUFFIX}
       )
-      target_link_libraries(${exename}${ARTIFACT_SUFFIX} testutillib${ARTIFACT_SUFFIX} testharness gtest ${THIRDPARTY_LIBS} ${ROCKSDB_LIB})
+      target_link_libraries(${exename}${ARTIFACT_SUFFIX} testutillib${ARTIFACT_SUFFIX} testharness rocksdb_gtest ${THIRDPARTY_LIBS} ${ROCKSDB_LIB})
       if(NOT "${exename}" MATCHES "db_sanity_test")
         gtest_discover_tests(${exename} DISCOVERY_TIMEOUT 120)
         add_dependencies(rocksdb_check ${exename}${ARTIFACT_SUFFIX})
@@ -1616,7 +1616,7 @@ endif()
 
 if(WITH_TOOLS)
   add_subdirectory(db_stress_tool)
-  add_custom_target(tools
+  add_custom_target(rocksdb_tools
     DEPENDS ${tool_deps})
 endif()
 
