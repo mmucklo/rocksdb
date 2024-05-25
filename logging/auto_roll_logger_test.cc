@@ -118,6 +118,7 @@ class AutoRollLoggerTest : public testing::Test {
   }
 
   static const std::string kSampleMessage;
+  static const char* const kSampleMessageFmt;
   static const std::string kTestDir;
   static const std::string kTestDbDir;
   static const std::string kLogFile;
@@ -126,6 +127,8 @@ class AutoRollLoggerTest : public testing::Test {
 
 const std::string AutoRollLoggerTest::kSampleMessage(
     "this is the message to be written to the log file!!");
+const char* const AutoRollLoggerTest::kSampleMessageFmt(
+    "this is the message to be written to the log file!!:LogHeaderTest line %d");
 const std::string AutoRollLoggerTest::kTestDir(
     test::PerThreadDBPath("db_log_test"));
 const std::string AutoRollLoggerTest::kTestDbDir(
@@ -624,7 +627,7 @@ TEST_F(AutoRollLoggerTest, LogHeaderTest) {
     int i = 0;
     for (size_t iter = 0; iter < 2; iter++) {
       while (logger.GetLogFileSize() < LOG_MAX_SIZE) {
-        Info(&logger, (kSampleMessage + ":LogHeaderTest line %d").c_str(), i);
+        Info(&logger, kSampleMessageFmt, i);
         ++i;
       }
 
