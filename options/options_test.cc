@@ -3538,7 +3538,7 @@ TEST_F(OptionsParserTest, ParseVersion) {
   db_opt.max_total_wal_size = 1024;
   ColumnFamilyOptions cf_opt;
 
-  std::string file_template =
+  const char* const file_template =
       "# This is a testing option string.\n"
       "# Currently we only support \"#\" styled comment.\n"
       "\n"
@@ -3560,7 +3560,7 @@ TEST_F(OptionsParserTest, ParseVersion) {
       ".", ".1.2",             // must have at least one digit before each dot
       "1.2.", "1.", "2.34."};  // must have at least one digit after each dot
   for (const auto& iv : invalid_versions) {
-    snprintf(buffer, kLength - 1, file_template.c_str(), iv.c_str());
+    snprintf(buffer, kLength - 1, file_template, iv.c_str());
 
     parser.Reset();
     ASSERT_OK(fs_->WriteToNewFile(iv, buffer));
@@ -3570,7 +3570,7 @@ TEST_F(OptionsParserTest, ParseVersion) {
   const std::vector<std::string> valid_versions = {
       "1.232", "100", "3.12", "1", "12.3  ", "  1.25  "};
   for (const auto& vv : valid_versions) {
-    snprintf(buffer, kLength - 1, file_template.c_str(), vv.c_str());
+    snprintf(buffer, kLength - 1, file_template, vv.c_str());
     parser.Reset();
     ASSERT_OK(fs_->WriteToNewFile(vv, buffer));
     ASSERT_OK(parser.Parse(vv, fs_.get(), false, 0 /* readahead_size */));
