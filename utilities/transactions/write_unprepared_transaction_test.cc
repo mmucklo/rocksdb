@@ -213,12 +213,12 @@ TEST_P(WriteUnpreparedSnapshotTest, ReadYourOwnWrite) {
           // after every Put(), meaning that the current snapshot in
           // snapshot_num must be greater than the "seqno" of any keys
           // written by the current transaction.
-          ASSERT_LT((static_cast<int64_t*>(const_cast<char*>(value.c_str())))[0], snapshot_num);
+          ASSERT_LT((reinterpret_cast<int64_t*>(const_cast<char*>(value.c_str())))[0], snapshot_num);
         } else {
           // If refresh snapshot is not on, then the snapshot was taken at
           // the beginning of the transaction, meaning all writes must come
           // after snapshot_num
-          ASSERT_GT((static_cast<int64_t*>(const_cast<char*>(value.c_str())))[0], snapshot_num);
+          ASSERT_GT((reinterpret_cast<int64_t*>(const_cast<char*>(value.c_str())))[0], snapshot_num);
         }
       };
 
