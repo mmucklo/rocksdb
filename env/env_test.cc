@@ -1028,7 +1028,7 @@ class IoctlFriendlyTmpdir {
   explicit IoctlFriendlyTmpdir() {
     char dir_buf[100];
 
-    const char* fmt = "%s/rocksdb.XXXXXX";
+    const char* const fmt = "%s/rocksdb.XXXXXX";
     const char* tmp = getenv("TEST_IOCTL_FRIENDLY_TMPDIR");
 
 #ifdef OS_WIN
