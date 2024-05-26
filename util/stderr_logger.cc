@@ -58,7 +58,10 @@ void StderrLogger::Logv(const char* format, va_list ap) {
                t.tm_year + 1900, t.tm_mon + 1, t.tm_mday, t.tm_hour, t.tm_min,
                t.tm_sec, static_cast<int>(now_tv.tv_usec),
                static_cast<long long unsigned int>(thread_id), prefix);
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Wformat-nonliteral"
   vsnprintf(buf.get() + written, log_suffix_len, format, ap);
+  #pragma clang diagnostic pop
 
   fprintf(stderr, "%s%c", buf.get(), '\n');
 }
