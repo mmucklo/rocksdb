@@ -17,7 +17,10 @@ class StringLogger : public Logger {
  public:
   using Logger::Logv;
   void Logv(const char* format, va_list ap) override {
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wformat-nonliteral"
     vsnprintf(buffer_, sizeof(buffer_), format, ap);
+    #pragma clang diagnostic pop
   }
   char* buffer() { return buffer_; }
 
