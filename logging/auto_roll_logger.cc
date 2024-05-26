@@ -171,7 +171,10 @@ std::string AutoRollLogger::ValistToString(const char* format,
   static const int MAXBUFFERSIZE = 1024;
   char buffer[MAXBUFFERSIZE];
 
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Wformat-nonliteral"
   int count = vsnprintf(buffer, MAXBUFFERSIZE, format, args);
+  #pragma clang diagnostic pop
   (void)count;
   assert(count >= 0);
 
