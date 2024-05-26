@@ -32,7 +32,10 @@ void LogBuffer::AddLogToBuffer(size_t max_log_size, const char* format,
   if (p < limit) {
     va_list backup_ap;
     va_copy(backup_ap, ap);
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wformat-nonliteral"
     auto n = vsnprintf(p, limit - p, format, backup_ap);
+    #pragma clang diagnostic pop
 #ifndef OS_WIN
     // MS reports -1 when the buffer is too short
     assert(n >= 0);
