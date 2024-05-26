@@ -38,7 +38,10 @@ void StderrLogger::Logv(const char* format, va_list ap) {
 
   va_list ap_copy;
   va_copy(ap_copy, ap);
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Wformat-nonliteral"
   const size_t log_suffix_len = vsnprintf(nullptr, 0, format, ap_copy) + 1;
+  #pragma clang diagnostic pop
   va_end(ap_copy);
 
   // Allocate space for the context, log_prefix, and log itself
