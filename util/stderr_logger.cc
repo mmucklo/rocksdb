@@ -38,10 +38,14 @@ void StderrLogger::Logv(const char* format, va_list ap) {
 
   va_list ap_copy;
   va_copy(ap_copy, ap);
+  #ifdef __clang__
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Wformat-nonliteral"
+  #endif
   const size_t log_suffix_len = vsnprintf(nullptr, 0, format, ap_copy) + 1;
+  #ifdef __clang__
   #pragma clang diagnostic pop
+  #endif
   va_end(ap_copy);
 
   // Allocate space for the context, log_prefix, and log itself
@@ -58,10 +62,14 @@ void StderrLogger::Logv(const char* format, va_list ap) {
                t.tm_year + 1900, t.tm_mon + 1, t.tm_mday, t.tm_hour, t.tm_min,
                t.tm_sec, static_cast<int>(now_tv.tv_usec),
                static_cast<long long unsigned int>(thread_id), prefix);
+  #ifdef __clang__
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Wformat-nonliteral"
+  #endif
   vsnprintf(buf.get() + written, log_suffix_len, format, ap);
+  #ifdef __clang__
   #pragma clang diagnostic pop
+  #endif
 
   fprintf(stderr, "%s%c", buf.get(), '\n');
 }

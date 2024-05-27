@@ -17,10 +17,14 @@ class StringLogger : public Logger {
  public:
   using Logger::Logv;
   void Logv(const char* format, va_list ap) override {
+    #ifdef __clang__
     #pragma clang diagnostic push
     #pragma clang diagnostic ignored "-Wformat-nonliteral"
+    #endif
     vsnprintf(buffer_, sizeof(buffer_), format, ap);
+    #ifdef __clang__
     #pragma clang diagnostic pop
+    #endif
   }
   char* buffer() { return buffer_; }
 
