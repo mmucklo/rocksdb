@@ -4492,10 +4492,14 @@ static void ColoredPrintf(GTestColor color, const char* fmt, ...) {
   // The '!= 0' comparison is necessary to satisfy MSVC 7.1.
 
   if (!use_color) {
+    #ifdef __clang__
     #pragma clang diagnostic push
     #pragma clang diagnostic ignored "-Wformat-nonliteral"
+    #endif
     vprintf(fmt, args);
+    #ifdef __clang__
     #pragma clang diagnostic pop
+    #endif
     va_end(args);
     return;
   }
@@ -4515,18 +4519,28 @@ static void ColoredPrintf(GTestColor color, const char* fmt, ...) {
   // printed but has not yet reached the console.
   fflush(stdout);
   SetConsoleTextAttribute(stdout_handle, new_color);
-
+  #ifdef __clang__
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Wformat-nonliteral"
+  #endif
   vprintf(fmt, args);
+  #ifdef __clang__
+  #pragma clang diagnostic pop
+  #endif
 
   fflush(stdout);
   // Restores the text color.
   SetConsoleTextAttribute(stdout_handle, old_color_attrs);
 #else
   printf("\033[0;3%sm", GetAnsiColorCode(color));
+  #ifdef __clang__
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Wformat-nonliteral"
+  #endif
   vprintf(fmt, args);
+  #ifdef __clang__
   #pragma clang diagnostic pop
+  #endif
   printf("\033[m");  // Resets the terminal to default.
 #endif  // GTEST_OS_WINDOWS && !GTEST_OS_WINDOWS_MOBILE
   va_end(args);

@@ -64,10 +64,14 @@ class StringLogger : public Logger {
   using Logger::Logv;
   void Logv(const char* format, va_list ap) override {
     char buffer[1000];
+    #ifdef __clang__
     #pragma clang diagnostic push
     #pragma clang diagnostic ignored "-Wformat-nonliteral"
+    #endif
     vsnprintf(buffer, sizeof(buffer), format, ap);
+    #ifdef __clang__
     #pragma clang diagnostic pop
+    #endif
     string_.append(buffer);
   }
   const std::string& str() const { return string_; }

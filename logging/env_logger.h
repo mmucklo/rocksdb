@@ -140,10 +140,14 @@ class EnvLogger : public Logger {
       if (p < limit) {
         va_list backup_ap;
         va_copy(backup_ap, ap);
+        #ifdef __clang__
         #pragma clang diagnostic push
         #pragma clang diagnostic ignored "-Wformat-nonliteral"
+        #endif
         p += vsnprintf(p, limit - p, format, backup_ap);
+        #ifdef __clang__
         #pragma clang diagnostic pop
+        #endif
         va_end(backup_ap);
       }
 
