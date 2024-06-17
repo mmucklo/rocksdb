@@ -53,7 +53,14 @@ class ConsoleLogger : public Logger {
 
   void Logv(const char* format, va_list ap) override {
     MutexLock _(&lock_);
+    #ifdef __clang__
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wformat-nonliteral"
+    #endif
     vprintf(format, ap);
+    #ifdef __clang__
+    #pragma clang diagnostic pop
+    #endif
     printf("\n");
   }
 

@@ -1028,7 +1028,7 @@ class IoctlFriendlyTmpdir {
   explicit IoctlFriendlyTmpdir() {
     char dir_buf[100];
 
-    const char* fmt = "%s/rocksdb.XXXXXX";
+    const char* const fmt = "%s/rocksdb.XXXXXX";
     const char* tmp = getenv("TEST_IOCTL_FRIENDLY_TMPDIR");
 
 #ifdef OS_WIN
@@ -1820,7 +1820,14 @@ class TestLogger : public Logger {
     {
       va_list backup_ap;
       va_copy(backup_ap, ap);
+      #ifdef __clang__
+      #pragma clang diagnostic push
+      #pragma clang diagnostic ignored "-Wformat-nonliteral"
+      #endif
       int n = vsnprintf(new_format, sizeof(new_format) - 1, format, backup_ap);
+      #ifdef __clang__
+      #pragma clang diagnostic pop
+      #endif
       // 48 bytes for extra information + bytes allocated
 
 // When we have n == -1 there is not a terminating zero expected
@@ -1900,7 +1907,14 @@ class TestLogger2 : public Logger {
     {
       va_list backup_ap;
       va_copy(backup_ap, ap);
+      #ifdef __clang__
+      #pragma clang diagnostic push
+      #pragma clang diagnostic ignored "-Wformat-nonliteral"
+      #endif
       int n = vsnprintf(new_format, sizeof(new_format) - 1, format, backup_ap);
+      #ifdef __clang__
+      #pragma clang diagnostic pop
+      #endif
       // 48 bytes for extra information + bytes allocated
       ASSERT_TRUE(n <=
                   48 + static_cast<int>(max_log_size_ - sizeof(port::TimeVal)));
